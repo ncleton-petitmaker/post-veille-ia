@@ -1,0 +1,252 @@
+# ============================================================
+# TEMPLATES LINKEDIN - Post Veille IA
+# ============================================================
+# Modifie ce fichier pour ajuster le style des posts générés
+# ============================================================
+
+# --- Profil auteur ---
+author:
+  name: "Nicolas"
+  role: "Formateur IA pour entreprises"
+  audience:
+    primary: "Décideurs, managers, DRH"
+    secondary: "Tech leads, développeurs seniors"
+  tone:
+    - "Expert accessible"
+    - "Concret et actionnable"
+    - "Pas alarmiste"
+    - "Pas de jargon inutile"
+  avoid:
+    - "Emojis excessifs"
+    - "Ton condescendant"
+    - "Hype sans substance"
+    - "Anglicismes quand le français existe"
+
+# --- Types de posts ---
+post_types:
+
+  # Post court - Accroche rapide
+  court:
+    target_words: 100-150
+    structure: |
+      [Hook percutant - 1 ligne qui arrête le scroll]
+
+      [Fait marquant ou stat]
+
+      [3 bullet points clés]
+
+      [Question d'engagement]
+
+      #Hashtags
+    guidelines:
+      - "Une seule idée forte"
+      - "Phrases courtes"
+      - "Chiffres si possible"
+      - "Question ouverte à la fin"
+    example_hooks:
+      - "[Entreprise] vient de [action inattendue]."
+      - "Ce que personne ne vous dit sur [sujet]."
+      - "[Stat choc] et pourtant..."
+      - "J'ai testé [outil]. Verdict :"
+
+  # Post standard - Analyse accessible
+  standard:
+    target_words: 200-300
+    structure: |
+      [Hook percutant]
+
+      [Contexte - pourquoi c'est important]
+
+      ---
+
+      [3 points numérotés avec détails]
+
+      ---
+
+      [Takeaway actionnable]
+
+      [Question d'engagement]
+
+      #Hashtags
+    guidelines:
+      - "Développer chaque point"
+      - "Utiliser des séparateurs visuels (---)"
+      - "Un conseil concret à la fin"
+      - "Ton conversationnel"
+
+  # Post long - Analyse approfondie
+  long:
+    target_words: 400-500
+    structure: |
+      [Hook percutant]
+
+      [Intro - le problème ou l'enjeu]
+
+      ---
+
+      [Section 1 : Contexte/Constat]
+
+      [Section 2 : Analyse détaillée avec sous-points]
+
+      [Section 3 : Implications concrètes]
+
+      ---
+
+      [Mon conseil/Ma recommandation]
+
+      ---
+
+      [Question d'engagement]
+
+      #Hashtags
+    guidelines:
+      - "Structure claire avec titres implicites"
+      - "Exemples concrets"
+      - "Perspective personnelle ('Mon take', 'Ce que j'en retiens')"
+      - "Call-to-action clair"
+
+# --- Styles par catégorie ---
+category_styles:
+
+  breaking_news:
+    tone: "Informatif, factuel"
+    hook_style: "L'annonce directe"
+    example: "[Entreprise] vient d'annoncer [quoi]. Voici ce que ça change."
+
+  analyse:
+    tone: "Réflexif, nuancé"
+    hook_style: "La question qui fait réfléchir"
+    example: "Pourquoi [tendance] va changer [domaine] en 2026."
+
+  cas_usage:
+    tone: "Pratique, concret"
+    hook_style: "Le résultat mesurable"
+    example: "Comment [entreprise] a [résultat] grâce à [méthode]."
+
+  prospective:
+    tone: "Visionnaire mais ancré"
+    hook_style: "La prédiction argumentée"
+    example: "3 tendances IA qui vont impacter [secteur] cette année."
+
+  alerte:
+    tone: "Urgent mais pas alarmiste"
+    hook_style: "Le signal faible"
+    example: "Ce que [événement] nous dit sur l'avenir de [domaine]."
+
+# --- Hashtags par thème ---
+hashtags:
+  base:
+    - "#IA"
+    - "#IntelligenceArtificielle"
+
+  by_category:
+    LLMs:
+      - "#LLM"
+      - "#ChatGPT"
+      - "#Claude"
+      - "#GenAI"
+    Enterprise:
+      - "#TransformationDigitale"
+      - "#EntrepriseIA"
+      - "#Innovation"
+    Tools:
+      - "#DevTools"
+      - "#Productivité"
+      - "#NoCode"
+    Safety:
+      - "#IAResponsable"
+      - "#EthiqueIA"
+    Research:
+      - "#RechercheIA"
+      - "#DeepLearning"
+
+  max_hashtags: 4
+  placement: "end"  # "end" ou "inline"
+
+# --- Règles de formatage ---
+formatting:
+  # Utiliser les sauts de ligne LinkedIn
+  line_breaks: true
+  # Utiliser les tirets pour les listes
+  bullet_style: "-"
+  # Utiliser les séparateurs
+  use_separators: true
+  separator: "---"
+  # Capitalisation des titres
+  title_caps: false
+  # Accents obligatoires (pas de "e" pour "é")
+  enforce_accents: true
+
+# --- Style de formatage ---
+# IMPORTANT: Pas d'emojis. Utiliser → et ↳ pour la structure.
+emojis:
+  enabled: false  # DÉSACTIVÉ - pas d'emojis dans les posts
+
+# --- Style d'écriture ---
+writing_style:
+  # Règles principales
+  rules:
+    - "Pas d'emoji"
+    - "Utiliser → pour les points principaux"
+    - "Utiliser ↳ pour les sous-points"
+    - "Phrases courtes"
+    - "Retour à la ligne après chaque phrase"
+    - "Privilégier les données factuelles"
+    - "Privilégier les chiffres"
+    - "Capter l'attention avec des faits concrets"
+
+  # Symboles à utiliser
+  symbols:
+    main_point: "→"
+    sub_point: "↳"
+    separator: "---"
+
+  # Focus du contenu
+  content_priority:
+    - "Chiffres et statistiques"
+    - "Données factuelles vérifiables"
+    - "Informations qui captent l'attention"
+    - "Impact concret et mesurable"
+    - "Noms d'entreprises et sources crédibles"
+
+# --- CTAs variés ---
+ctas:
+  # Questions d'engagement (rotation aléatoire)
+  questions:
+    general:
+      - "Qu'en pensez-vous ?"
+      - "Votre avis ?"
+      - "Des retours d'expérience à partager ?"
+      - "Vous avez déjà testé ?"
+
+    tools:
+      - "Vous utilisez cet outil ?"
+      - "Quel est votre workflow actuel ?"
+      - "Prêts à tester ?"
+      - "Ça vous tente ?"
+
+    enterprise:
+      - "Comment vous positionnez-vous ?"
+      - "Votre entreprise est-elle prête ?"
+      - "Quelle est votre stratégie ?"
+      - "Vous avez déjà intégré ça ?"
+
+    prospective:
+      - "Vous y croyez pour 2026 ?"
+      - "Ça va changer quoi pour vous ?"
+      - "Prêts pour ce changement ?"
+      - "Comment vous préparez-vous ?"
+
+  # Appels à l'action directs
+  actions:
+    - "Suivez-moi pour plus de décryptages IA"
+    - "Activez la 🔔 pour ne rien manquer"
+    - "Partagez si ça peut aider quelqu'un"
+
+# --- A/B Testing ---
+ab_testing:
+  enabled: false
+  variants_per_post: 2
+  test_elements:
+    - "hooks"
+    - "cta"

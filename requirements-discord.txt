@@ -1,0 +1,19 @@
+# ============================================================
+# Requirements - Discord Bot Collector
+# Post Veille IA
+# ============================================================
+# Installation: pip install -r requirements-discord.txt
+# ============================================================
+
+# Discord API
+discord.py>=2.3.0
+
+# Async SQLite
+aiosqlite>=0.19.0
+
+# HTTP client (pour les webhooks)
+aiohttp>=3.9.0
+
+# Configuration
+pyyaml>=6.0
+python-dotenv>=1.0.0

@@ -1,0 +1,72 @@
+# ============================================================
+# Git Ignore - Post Veille IA
+# ============================================================
+
+# === SECRETS (IMPORTANT!) ===
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+.venv/
+env/
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# === DATA & OUTPUT ===
+_bmad-output/
+data/*.db
+*.db
+*.sqlite
+*.log
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# === macOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# === BMAD Method ===
+_bmad/
+
+# === Fly.io ===
+.fly/
+
+# === Temporary ===
+tmp/
+temp/
+*.tmp
+*.bak

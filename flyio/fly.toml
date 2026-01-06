@@ -1,0 +1,46 @@
+# ============================================================
+# Fly.io Configuration - Discord Bot Collector
+# Post Veille IA
+# ============================================================
+# Déploiement: flyctl deploy --config flyio/fly.toml
+# ============================================================
+
+app = "veille-ia-discord-bot"
+primary_region = "cdg"  # Paris
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  # Variables non-sensibles
+  PYTHONUNBUFFERED = "1"
+  TZ = "Europe/Paris"
+
+# Configuration des machines
+[vm]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+# IMPORTANT: Empêcher l'arrêt automatique du bot
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+# Health check simple (le bot n'a pas de serveur HTTP)
+# On utilise un process check à la place
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+
+# Scaling - garder une seule machine
+[processes]
+  app = "python scripts/collectors/discord_collector.py"
+
+# Volumes pour persister la base SQLite
+[[mounts]]
+  source = "discord_data"
+  destination = "/app/data"

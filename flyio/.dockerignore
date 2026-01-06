@@ -1,0 +1,47 @@
+# ============================================================
+# Docker Ignore - Discord Bot
+# ============================================================
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets (IMPORTANT!)
+.env
+.env.*
+*.pem
+*.key
+
+# Build artifacts
+_bmad/
+_bmad-output/
+*.db
+
+# Documentation
+*.md
+docs/
+
+# Tests
+tests/
+*.test.py
+
+# Local config
+.claude/
+
+# macOS
+.DS_Store

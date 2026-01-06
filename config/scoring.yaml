@@ -1,0 +1,159 @@
+# ============================================================
+# CONFIGURATION DU SCORING - Post Veille IA
+# ============================================================
+# Modifie ce fichier pour ajuster les critères de scoring
+# L'agent d'analyse utilisera ces paramètres
+# ============================================================
+
+# --- Critères de scoring (poids sur 100) ---
+scoring_criteria:
+  # Pertinence pour l'audience cible (décideurs, managers, RH)
+  audience_relevance:
+    weight: 30
+    description: "Impact direct sur les décisions business"
+    keywords_boost:
+      - "enterprise"
+      - "business"
+      - "ROI"
+      - "productivity"
+      - "adoption"
+      - "strategy"
+      - "workflow"
+      - "team"
+      - "company"
+      - "work"
+      - "developer"
+      - "engineer"
+      - "code"
+      - "tool"
+      - "Claude"
+      - "GPT"
+      - "Gemini"
+      - "OpenAI"
+      - "Anthropic"
+      - "Google"
+      - "Microsoft"
+      - "transformation"
+      - "digital"
+
+  # Fraîcheur et actualité
+  timeliness:
+    weight: 20
+    description: "Breaking news vs analyse de fond"
+    boost_if_hours_old_less_than: 24
+    penalty_if_hours_old_more_than: 72
+
+  # Potentiel d'engagement LinkedIn
+  engagement_potential:
+    weight: 25
+    description: "Sujet qui génère des réactions"
+    keywords_boost:
+      - "reveal"
+      - "secret"
+      - "mistake"
+      - "why"
+      - "how"
+      - "new"
+      - "first"
+      - "breakthrough"
+      - "announce"
+      - "launch"
+      - "release"
+      - "update"
+      - "achieve"
+      - "solve"
+      - "problem"
+      - "major"
+      - "big"
+      - "huge"
+      - "game-chang"
+      - "transform"
+      - "revoluton"
+      - "predict"
+      - "future"
+      - "next"
+      - "2026"
+      - "just"
+      - "now"
+
+  # Qualité de la source
+  source_quality:
+    weight: 15
+    description: "Crédibilité et autorité de la source"
+    tier_1_sources:  # Score bonus +2
+      - "MIT Technology Review"
+      - "OpenAI Blog"
+      - "Anthropic Blog"
+      - "Google AI Blog"
+      - "Nature"
+      - "arXiv"
+    tier_2_sources:  # Score bonus +1
+      - "VentureBeat"
+      - "TechCrunch"
+      - "Hugging Face Blog"
+      - "The Verge"
+
+  # Originalité / angle unique
+  uniqueness:
+    weight: 10
+    description: "Pas déjà vu partout"
+    penalize_if_similar_titles: true
+
+# --- Catégories disponibles ---
+categories:
+  - name: "LLMs"
+    keywords: ["GPT", "Claude", "Gemini", "LLaMA", "language model", "chatbot"]
+  - name: "Safety"
+    keywords: ["alignment", "safety", "ethics", "bias", "regulation", "risk"]
+  - name: "Enterprise"
+    keywords: ["business", "enterprise", "adoption", "ROI", "productivity", "workflow"]
+  - name: "Tools"
+    keywords: ["tool", "API", "SDK", "framework", "library", "code"]
+  - name: "Research"
+    keywords: ["paper", "study", "research", "benchmark", "arXiv"]
+  - name: "Startup"
+    keywords: ["funding", "startup", "raised", "seed", "series"]
+  - name: "Hardware"
+    keywords: ["GPU", "TPU", "chip", "NVIDIA", "AMD", "infrastructure"]
+  - name: "Autonomous"
+    keywords: ["autonomous", "self-driving", "robotics", "FSD", "vehicle"]
+  - name: "Multimodal"
+    keywords: ["vision", "image", "video", "audio", "multimodal"]
+  - name: "Agents"
+    keywords: ["agent", "agentic", "autonomous", "workflow", "automation"]
+
+# --- Seuils de décision ---
+thresholds:
+  # Score minimum pour générer un post (ajuste selon tes besoins)
+  min_score_for_post: 5
+  # Score minimum pour post prioritaire (publier en premier)
+  priority_score: 7
+  # Nombre max d'articles à analyser par jour
+  max_articles_to_analyze: 50
+  # Nombre max de posts à générer par jour
+  max_posts_per_day: 5
+
+# --- Filtres d'exclusion ---
+exclusions:
+  # Mots-clés qui réduisent le score
+  negative_keywords:
+    - "sponsored"
+    - "advertisement"
+    - "press release"
+    - "partner content"
+  # Sources à ignorer
+  blocked_sources: []
+  # Titres clickbait (réduire le score)
+  clickbait_patterns:
+    - "you won't believe"
+    - "mind-blowing"
+    - "insane"
+    - "crazy"
+
+# --- Notes personnelles ---
+# Ajoute tes observations ici pour affiner le scoring
+notes: |
+  - Les posts sur Claude Code performent bien (audience tech-savvy)
+  - Les analyses de fond > news brutes pour l'engagement
+  - Éviter les sujets trop techniques sans angle business
+  - Les cas d'usage concrets marchent mieux que la théorie

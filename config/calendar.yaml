@@ -1,0 +1,260 @@
+# ============================================================
+# CALENDRIER ÉDITORIAL - Post Veille IA
+# ============================================================
+# Définit les types de posts par jour de la semaine
+# L'agent suit ce planning mais peut s'adapter à l'actualité
+# Modifiable via: /calendar set <jour> <type>
+# ============================================================
+
+version: 1
+last_updated: "2025-01-06T16:00:00Z"
+
+# ============================================================
+# PLANNING HEBDOMADAIRE PAR DÉFAUT
+# ============================================================
+default_week:
+  lundi:
+    type: astuce
+    emoji: "💡"
+    description: "Conseil pratique, outil IA, prompt utile"
+    target_length: standard
+
+  mardi:
+    type: decryptage
+    emoji: "📰"
+    description: "Analyse d'une actualité IA récente"
+    target_length: standard
+
+  mercredi:
+    type: prospective
+    emoji: "🔮"
+    description: "Vision long terme, impact sur les métiers et industries"
+    target_length: long
+
+  jeudi:
+    type: astuce
+    emoji: "💡"
+    description: "Workflow, automatisation, cas pratique"
+    target_length: standard
+
+  vendredi:
+    type: cas_usage
+    emoji: "📊"
+    description: "Exemple concret d'IA en entreprise (PME/Grand groupe)"
+    target_length: standard
+
+  samedi:
+    type: none
+    description: "Pas de publication"
+
+  dimanche:
+    type: none
+    description: "Pas de publication"
+
+# ============================================================
+# TYPES DE POSTS DISPONIBLES
+# ============================================================
+post_types:
+  astuce:
+    name: "Astuce pratique"
+    emoji: "💡"
+    description: "Conseils concrets pour utiliser l'IA au quotidien"
+    audience: "Tous professionnels"
+    tone: "Didactique, accessible"
+    structure:
+      - hook: "Question ou promesse de valeur"
+      - liste: "3-5 points concrets"
+      - conclusion: "Appel à l'action"
+    example_hooks:
+      - "Vous perdez 2h par jour sur des tâches répétitives ?"
+      - "3 prompts ChatGPT que j'utilise chaque matin :"
+      - "L'outil IA que 90% des managers ignorent :"
+
+  decryptage:
+    name: "Décryptage actualité"
+    emoji: "📰"
+    description: "Analyse d'une news IA avec angle business"
+    audience: "Décideurs, managers"
+    tone: "Expert accessible, pas alarmiste"
+    structure:
+      - hook: "L'actu en une phrase choc"
+      - contexte: "Pourquoi c'est important"
+      - analyse: "Ce que ça change concrètement"
+      - opinion: "Mon point de vue de formateur"
+    example_hooks:
+      - "OpenAI vient d'annoncer [X]. Voici ce que ça change pour vous."
+      - "Tout le monde parle de [X]. Mais personne n'explique l'essentiel."
+      - "[Entreprise] mise 1 milliard sur l'IA. La vraie raison :"
+
+  prospective:
+    name: "Vision prospective"
+    emoji: "🔮"
+    description: "Réflexion sur l'avenir de l'IA et son impact"
+    audience: "Dirigeants, stratèges"
+    tone: "Visionnaire mais réaliste"
+    structure:
+      - hook: "Projection ou question provocante"
+      - tendances: "Les signaux faibles observés"
+      - scenarios: "Ce qui pourrait arriver"
+      - preparation: "Comment s'y préparer"
+    example_hooks:
+      - "Dans 3 ans, 40% des tâches de votre équipe seront automatisées."
+      - "Votre métier existera-t-il encore en 2030 ?"
+      - "Les 5 compétences qui vaudront de l'or dans 5 ans :"
+
+  cas_usage:
+    name: "Cas d'usage entreprise"
+    emoji: "📊"
+    description: "Exemple concret de déploiement IA en entreprise"
+    audience: "Managers opérationnels, direction"
+    tone: "Factuel, inspirant"
+    structure:
+      - hook: "Résultat chiffré ou transformation"
+      - contexte: "L'entreprise et son défi"
+      - solution: "L'IA déployée"
+      - resultats: "ROI, gains mesurables"
+      - lecons: "Ce qu'on peut en retenir"
+    example_hooks:
+      - "Cette PME a réduit ses coûts de 30% grâce à l'IA."
+      - "Comment [Entreprise] a transformé son service client avec ChatGPT."
+      - "De 2 semaines à 2 heures : l'IA qui a changé leur process."
+
+  alerte:
+    name: "Alerte / Débat"
+    emoji: "⚠️"
+    description: "Point de vigilance ou sujet de réflexion"
+    audience: "Tous"
+    tone: "Nuancé, pas alarmiste"
+    structure:
+      - hook: "Fait surprenant ou inquiétant"
+      - enjeux: "Pourquoi ça compte"
+      - nuance: "Les deux côtés du débat"
+      - position: "Mon avis de formateur"
+    example_hooks:
+      - "L'IA ne remplacera pas votre job. Mais quelqu'un qui l'utilise, si."
+      - "Le vrai danger de l'IA, ce n'est pas celui qu'on croit."
+      - "Pourquoi je refuse d'utiliser [outil] avec mes clients."
+
+  reflexion:
+    name: "Réflexion personnelle"
+    emoji: "🤔"
+    description: "Partage d'expérience ou questionnement"
+    audience: "Communauté LinkedIn"
+    tone: "Personnel, authentique"
+    structure:
+      - hook: "Anecdote ou constat personnel"
+      - developpement: "Ce que j'ai appris"
+      - question: "Ouverture au débat"
+    example_hooks:
+      - "J'ai formé 200 managers à l'IA cette année. Voici ce qui les bloque."
+      - "La question que tous mes clients me posent :"
+      - "J'ai changé d'avis sur [sujet]. Voici pourquoi."
+
+# ============================================================
+# RÈGLES D'ADAPTATION AUTOMATIQUE
+# ============================================================
+# L'agent peut modifier le planning si :
+override_rules:
+  - name: "Breaking news majeure"
+    condition:
+      relevance_score: ">= 9"
+      source_category: "official"
+    action: "replace_today"
+    force_type: "decryptage"
+    notify: true
+    message: "Actualité majeure détectée - Post décryptage suggéré"
+
+  - name: "Tendance virale Reddit"
+    condition:
+      source: "reddit"
+      upvotes: ">= 2000"
+      age_hours: "<= 24"
+    action: "suggest_addition"
+    force_type: "decryptage"
+    notify: true
+
+  - name: "Annonce produit majeur"
+    condition:
+      title_contains:
+        - "GPT-5"
+        - "Claude 4"
+        - "Gemini 2"
+        - "Llama 4"
+    action: "alert_immediate"
+    force_type: "decryptage"
+    priority: "urgent"
+
+# ============================================================
+# HASHTAGS PAR DÉFAUT
+# ============================================================
+hashtags:
+  always:
+    - "#IA"
+    - "#IntelligenceArtificielle"
+
+  by_type:
+    astuce:
+      - "#Productivité"
+      - "#Outils"
+      - "#Tips"
+    decryptage:
+      - "#ActuIA"
+      - "#Innovation"
+      - "#Tech"
+    prospective:
+      - "#FutureOfWork"
+      - "#Transformation"
+      - "#Stratégie"
+    cas_usage:
+      - "#Entreprise"
+      - "#ROI"
+      - "#Digital"
+    alerte:
+      - "#Débat"
+      - "#Réflexion"
+    reflexion:
+      - "#Partage"
+      - "#Formation"
+
+  trending: []  # Mis à jour automatiquement
+
+# ============================================================
+# HORAIRES DE PUBLICATION RECOMMANDÉS
+# ============================================================
+posting_times:
+  optimal:
+    - time: "08:30"
+      reason: "Trajet matin, forte activité LinkedIn"
+    - time: "12:30"
+      reason: "Pause déjeuner"
+    - time: "17:30"
+      reason: "Fin de journée, consultation mobile"
+
+  good:
+    - time: "09:30"
+    - time: "14:00"
+    - time: "18:30"
+
+  avoid:
+    - "before 07:00"
+    - "after 21:00"
+    - "weekends"  # Sauf contenu léger/réflexion
+
+# ============================================================
+# LONGUEURS CIBLES
+# ============================================================
+lengths:
+  short:
+    words: "50-100"
+    chars: "300-600"
+    use_case: "Accroche, teaser"
+
+  standard:
+    words: "150-250"
+    chars: "900-1500"
+    use_case: "Post classique LinkedIn"
+
+  long:
+    words: "300-450"
+    chars: "1800-2700"
+    use_case: "Analyse approfondie, thread-like"

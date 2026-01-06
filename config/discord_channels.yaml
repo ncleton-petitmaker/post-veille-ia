@@ -1,0 +1,136 @@
+# ============================================================
+# DISCORD CHANNELS - Post Veille IA
+# ============================================================
+# Liste des serveurs et canaux Discord à monitorer.
+# Le bot doit être invité sur chaque serveur.
+# ============================================================
+
+# --- Serveurs AI officiels ---
+servers:
+
+  # OpenAI - ChatGPT, GPT models
+  openai:
+    enabled: true
+    server_id: "974519864045756446"  # OpenAI Discord
+    channels:
+      - name: "announcements"
+        channel_id: "974519864045756449"
+        priority: "high"
+      - name: "gpt-4-discussion"
+        channel_id: null  # À remplir
+        priority: "medium"
+
+  # Anthropic - Claude
+  anthropic:
+    enabled: true
+    server_id: "1110598183144399042"  # Anthropic Discord
+    channels:
+      - name: "announcements"
+        channel_id: null  # À remplir après avoir rejoint
+        priority: "high"
+      - name: "product-updates"
+        channel_id: null
+        priority: "high"
+
+  # Hugging Face - Open source AI
+  huggingface:
+    enabled: true
+    server_id: "879548962464493619"  # Hugging Face Discord
+    channels:
+      - name: "announcements"
+        channel_id: null
+        priority: "high"
+      - name: "paper-discussions"
+        channel_id: null
+        priority: "medium"
+
+  # Mistral AI - European LLM
+  mistral:
+    enabled: true
+    server_id: "1168957894581194772"  # Mistral AI Discord
+    channels:
+      - name: "announcements"
+        channel_id: null
+        priority: "high"
+      - name: "le-chat"
+        channel_id: null
+        priority: "medium"
+
+  # Stability AI - Image generation
+  stability:
+    enabled: false  # Activer si besoin
+    server_id: "1002292111942635562"
+    channels:
+      - name: "announcements"
+        channel_id: null
+        priority: "high"
+
+  # Midjourney - Image generation
+  midjourney:
+    enabled: false
+    server_id: "662267976984297473"
+    channels:
+      - name: "announcements"
+        channel_id: null
+        priority: "high"
+
+  # Eleuther AI - Open source research
+  eleuther:
+    enabled: false
+    server_id: "729741769192767510"
+    channels:
+      - name: "announcements"
+        channel_id: null
+        priority: "medium"
+
+# --- Configuration de collecte ---
+collection:
+  # Intervalle entre les vérifications (secondes)
+  check_interval: 300  # 5 minutes
+
+  # Nombre max de messages à récupérer par canal
+  max_messages_per_channel: 50
+
+  # Âge max des messages à collecter (heures)
+  max_message_age_hours: 24
+
+  # Filtres de contenu
+  filters:
+    # Mots-clés pour prioriser (regex)
+    priority_keywords:
+      - "(?i)announc"
+      - "(?i)release"
+      - "(?i)update"
+      - "(?i)new feature"
+      - "(?i)breaking"
+      - "(?i)launch"
+      - "(?i)available"
+      - "(?i)introducing"
+
+    # Ignorer les messages contenant
+    ignore_patterns:
+      - "(?i)^giveaway"
+      - "(?i)^contest"
+      - "(?i)welcome to"
+
+# --- Stockage ---
+storage:
+  # Base de données locale
+  database: "discord_messages.db"
+
+  # Durée de rétention (jours)
+  retention_days: 30
+
+  # Export vers le système principal
+  export:
+    enabled: true
+    format: "json"
+    output_dir: "_bmad-output/raw-articles"
+
+# --- Notifications ---
+notifications:
+  # Webhook Discord pour alertes importantes
+  use_project_webhook: true  # Utilise DISCORD_WEBHOOK_URL du .env
+
+  # Notifier pour les messages prioritaires
+  notify_on_priority: true

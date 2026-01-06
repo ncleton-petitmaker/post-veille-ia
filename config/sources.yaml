@@ -1,0 +1,213 @@
+# ============================================================
+# SOURCES DE VEILLE IA - Configuration
+# ============================================================
+# Fichier géré par l'agent via /sources add|remove
+# Sync automatique vers Raspberry Pi via SSH
+# ============================================================
+
+version: 2
+last_updated: "2025-01-06T16:00:00Z"
+
+# ============================================================
+# RSS FEEDS (Gratuit - feedparser)
+# ============================================================
+rss:
+  # --- Blogs Officiels (Priorité Haute) ---
+  - name: "OpenAI Blog"
+    url: "https://openai.com/blog/rss/"
+    priority: high
+    enabled: true
+
+  - name: "Anthropic Blog"
+    url: "https://www.anthropic.com/feed.xml"
+    priority: high
+    enabled: true
+
+  - name: "Google AI Blog"
+    url: "https://ai.googleblog.com/feeds/posts/default"
+    priority: high
+    enabled: true
+
+  - name: "Hugging Face Blog"
+    url: "https://huggingface.co/blog/feed.xml"
+    priority: high
+    enabled: true
+
+  - name: "Meta AI Blog"
+    url: "https://ai.meta.com/blog/rss/"
+    priority: high
+    enabled: true
+
+  # --- Tech News (Priorité Moyenne) ---
+  - name: "TechCrunch AI"
+    url: "https://techcrunch.com/tag/artificial-intelligence/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "VentureBeat AI"
+    url: "https://venturebeat.com/category/ai/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "MIT Technology Review"
+    url: "https://www.technologyreview.com/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "Ars Technica AI"
+    url: "https://arstechnica.com/tag/artificial-intelligence/feed/"
+    priority: medium
+    enabled: true
+
+# ============================================================
+# JINA AI READER (Sites JavaScript)
+# ============================================================
+# Usage: requests.get(f"https://r.jina.ai/{url}")
+# Free tier: 10M tokens, 500 RPM avec API key
+# ============================================================
+jina:
+  api_key_env: "JINA_API_KEY"  # Optionnel mais recommandé
+
+  sites:
+    - name: "The Verge AI"
+      url: "https://www.theverge.com/ai-artificial-intelligence"
+      selector: "article"  # Optionnel
+      priority: high
+      enabled: true
+
+    - name: "TLDR AI Newsletter"
+      url: "https://tldr.tech/ai"
+      priority: high
+      enabled: true
+
+    - name: "The Rundown AI"
+      url: "https://www.therundown.ai/"
+      priority: high
+      enabled: true
+
+    - name: "Ben's Bites"
+      url: "https://bensbites.beehiiv.com/"
+      priority: medium
+      enabled: true
+
+# ============================================================
+# REDDIT (JSON Endpoint - Gratuit)
+# ============================================================
+# Usage: requests.get(f"https://reddit.com/r/{sub}/{filter}.json")
+# ============================================================
+reddit:
+  user_agent: "VeilleIA/2.0 (by /u/yourname)"
+
+  subreddits:
+    # --- Tier 1: Quotidien ---
+    - name: "LocalLLaMA"
+      filter: hot
+      min_upvotes: 50
+      frequency: daily
+      enabled: true
+
+    - name: "ClaudeAI"
+      filter: hot
+      min_upvotes: 30
+      frequency: daily
+      enabled: true
+
+    - name: "ChatGPT"
+      filter: top
+      period: day
+      min_upvotes: 200
+      frequency: daily
+      enabled: true
+
+    - name: "MachineLearning"
+      filter: hot
+      min_upvotes: 100
+      frequency: daily
+      enabled: true
+
+    # --- Tier 2: 2-3x/semaine ---
+    - name: "singularity"
+      filter: top
+      period: week
+      min_upvotes: 500
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "AI_Agents"
+      filter: hot
+      min_upvotes: 50
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "artificial"
+      filter: top
+      period: day
+      min_upvotes: 100
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "OpenAI"
+      filter: hot
+      min_upvotes: 100
+      frequency: twice_weekly
+      enabled: true
+
+# ============================================================
+# DISCORD (LAION Scraper - Compte secondaire)
+# ============================================================
+# ATTENTION: Utiliser un compte secondaire (risque ToS)
+# Scrape quotidien à heure fixe
+# ============================================================
+discord:
+  token_env: "DISCORD_USER_TOKEN"
+  scrape_time: "08:00"
+
+  channels: []
+    # Ajouter via: /sources add discord <server_id> <channel_id> --name "Nom"
+    # Exemple:
+    # - server_name: "LAION"
+    #   channel_id: "123456789"
+    #   max_messages: 100
+    #   enabled: true
+
+# ============================================================
+# YOUTUBE (Transcripts - Gratuit)
+# ============================================================
+# Usage: youtube-transcript-api
+# Collecte on-demand (pas de cron)
+# ============================================================
+youtube:
+  channels:
+    - name: "AI Explained"
+      channel_url: "https://www.youtube.com/@aiaboratoire"
+      enabled: true
+
+    - name: "Two Minute Papers"
+      channel_url: "https://www.youtube.com/@TwoMinutePapers"
+      enabled: true
+
+    - name: "Yannic Kilcher"
+      channel_url: "https://www.youtube.com/@YannicKilcher"
+      enabled: true
+
+# ============================================================
+# PARAMÈTRES GLOBAUX
+# ============================================================
+settings:
+  # Collecte
+  max_articles_per_source: 15
+  max_age_hours: 72
+  dedupe_window_days: 7
+
+  # Rate limiting
+  requests_delay_seconds: 2
+  retry_attempts: 3
+  timeout_seconds: 30
+
+  # Cron schedules (format: "HH:MM" ou "*/Xh")
+  schedules:
+    rss: "*/6h"           # Toutes les 6 heures
+    jina: "*/6h"          # Toutes les 6 heures
+    reddit: "*/4h"        # Toutes les 4 heures
+    discord: "08:00"      # Une fois par jour
+    youtube: "manual"     # À la demande

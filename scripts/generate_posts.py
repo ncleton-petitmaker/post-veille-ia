@@ -1,0 +1,460 @@
+#!/Users/nicolascleton/Documents/Projet veille pour Linkedin/post-veille-ia/venv/bin/python3
+"""
+Générateur de posts LinkedIn - Post Veille IA
+Sprint 1 - US-4.1
+
+Script standalone pour générer des posts LinkedIn à partir des articles analysés.
+Utilise la configuration linkedin_templates.yaml pour le style.
+
+Usage:
+    python generate_posts.py                    # Génère pour le fichier du jour
+    python generate_posts.py --date 2026-01-05  # Génère pour une date spécifique
+    python generate_posts.py --top 3            # Génère pour les 3 meilleurs articles
+"""
+
+import argparse
+import json
+import logging
+import random
+from datetime import datetime
+from pathlib import Path
+from typing import List, Dict, Optional
+import yaml
+
+# Configuration logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Chemins
+PROJECT_ROOT = Path(__file__).parent.parent
+CONFIG_PATH = PROJECT_ROOT / "config" / "linkedin_templates.yaml"
+SCORING_CONFIG_PATH = PROJECT_ROOT / "config" / "scoring.yaml"
+ANALYZED_DIR = PROJECT_ROOT / "_bmad-output" / "analyzed-articles"
+OUTPUT_DIR = PROJECT_ROOT / "_bmad-output" / "linkedin-posts"
+
+
+def load_template_config() -> dict:
+    """Charge la configuration des templates"""
+    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+
+def load_scoring_config() -> dict:
+    """Charge la configuration de scoring"""
+    with open(SCORING_CONFIG_PATH, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+
+def load_analyzed_articles(input_path: Path) -> Dict:
+    """Charge les articles analysés"""
+    with open(input_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
+def get_symbols(config: dict) -> dict:
+    """Retourne les symboles de formatage depuis la config"""
+    writing_style = config.get('writing_style', {})
+    symbols = writing_style.get('symbols', {})
+    return {
+        'main': symbols.get('main_point', '→'),
+        'sub': symbols.get('sub_point', '↳'),
+        'sep': symbols.get('separator', '---')
+    }
+
+
+def get_cta(categories: List[str], config: dict) -> str:
+    """Retourne un CTA adapté aux catégories"""
+    ctas_config = config.get('ctas', {})
+    questions = ctas_config.get('questions', {})
+
+    # Choisir la catégorie de CTA
+    if 'Tools' in categories or 'LLMs' in categories:
+        pool = questions.get('tools', questions.get('general', []))
+    elif 'Enterprise' in categories:
+        pool = questions.get('enterprise', questions.get('general', []))
+    elif 'Research' in categories:
+        pool = questions.get('prospective', questions.get('general', []))
+    else:
+        pool = questions.get('general', ["Qu'en pensez-vous ?"])
+
+    return random.choice(pool) if pool else "Qu'en pensez-vous ?"
+
+
+def generate_hook(article: dict) -> str:
+    """
+    Génère un hook accrocheur pour le post.
+    Style : phrases courtes, percutantes, focus sur les faits.
+    """
+    title = article.get('title', '')
+    source = article.get('source', '')
+
+    # Nettoyer le titre
+    clean_title = title.replace('...', '').strip()
+
+    # Extraire le sujet principal
+    if ':' in clean_title:
+        subject = clean_title.split(':')[0].strip()
+    elif ' - ' in clean_title:
+        subject = clean_title.split(' - ')[0].strip()
+    else:
+        subject = clean_title[:80]
+
+    # Hook simple et direct
+    return f"{subject}."
+
+
+def generate_post_court(article: dict, config: dict) -> str:
+    """
+    Génère un post court (100-150 mots).
+
+    Style: phrases courtes, → et ↳, focus données factuelles.
+    """
+    title = article.get('title', '')
+    source = article.get('source', '')
+    categories = article.get('categories', [])
+    hashtags = article.get('suggested_hashtags', ['#IA', '#IntelligenceArtificielle'])
+
+    sym = get_symbols(config)
+    cta = get_cta(categories, config)
+    hook = generate_hook(article)
+
+    # Construire les hashtags
+    hashtag_str = ' '.join(hashtags[:4]) if hashtags else '#IA #IntelligenceArtificielle'
+
+    post = f"""{hook}
+
+{source} vient de publier ça.
+Voici ce qu'il faut retenir.
+
+{sym['main']} L'essentiel
+{sym['sub']} Impact direct sur les équipes.
+{sym['sub']} Les chiffres parlent d'eux-mêmes.
+{sym['sub']} Les entreprises bougent.
+
+{sym['main']} Pourquoi maintenant
+{sym['sub']} Le marché accélère.
+{sym['sub']} Ceux qui attendent perdent du terrain.
+
+{cta}
+
+{hashtag_str}"""
+
+    return post
+
+
+def generate_post_standard(article: dict, config: dict) -> str:
+    """
+    Génère un post standard (200-300 mots).
+
+    Style: phrases courtes, → et ↳, focus données factuelles.
+    """
+    title = article.get('title', '')
+    source = article.get('source', '')
+    categories = article.get('categories', [])
+    hashtags = article.get('suggested_hashtags', ['#IA'])
+
+    sym = get_symbols(config)
+    cta = get_cta(categories, config)
+    hook = generate_hook(article)
+
+    hashtag_str = ' '.join(hashtags[:4]) if hashtags else '#IA #IntelligenceArtificielle'
+
+    post = f"""{hook}
+
+{source} vient de publier une annonce importante.
+Ça mérite qu'on s'y arrête.
+
+---
+
+{sym['main']} Ce qui change concrètement
+
+Pour les équipes techniques :
+{sym['sub']} Les workflows évoluent.
+{sym['sub']} L'IA devient un collaborateur, pas juste un outil.
+{sym['sub']} Les compétences à développer changent.
+
+Pour les décideurs :
+{sym['sub']} Le signal est clair.
+{sym['sub']} Les early adopters prennent de l'avance.
+{sym['sub']} Ce n'est plus une option.
+
+---
+
+{sym['main']} Mon analyse
+
+Ce n'est pas une révolution du jour au lendemain.
+C'est une évolution qu'il faut accompagner.
+Les entreprises qui bougent maintenant auront un avantage.
+
+{cta}
+
+{hashtag_str}"""
+
+    return post
+
+
+def generate_post_long(article: dict, config: dict) -> str:
+    """
+    Génère un post long (400-500 mots).
+
+    Style: phrases courtes, → et ↳, focus données factuelles.
+    """
+    title = article.get('title', '')
+    source = article.get('source', '')
+    categories = article.get('categories', [])
+    hashtags = article.get('suggested_hashtags', ['#IA'])
+    score = article.get('score', 7)
+
+    sym = get_symbols(config)
+    cta = get_cta(categories, config)
+    hook = generate_hook(article)
+
+    hashtag_str = ' '.join(hashtags[:4]) if hashtags else '#IA #IntelligenceArtificielle'
+
+    post = f"""{hook}
+
+Ce que j'en retiens va changer votre façon d'aborder l'IA.
+
+---
+
+{sym['main']} Le contexte
+
+{source} vient de publier.
+Quand ils parlent, le marché écoute.
+Cette annonce s'inscrit dans une tendance plus large.
+L'IA ne se contente plus d'assister.
+Elle commence à agir.
+
+---
+
+{sym['main']} Ce qui change concrètement
+
+Pour les équipes techniques :
+{sym['sub']} Les outils évoluent vers plus d'autonomie.
+{sym['sub']} La supervision humaine reste critique.
+{sym['sub']} Les compétences à développer changent.
+
+Pour les managers :
+{sym['sub']} Nouveaux process à définir.
+{sym['sub']} Métriques à adapter.
+{sym['sub']} Formation à repenser.
+
+Pour les décideurs :
+{sym['sub']} Investissements à arbitrer.
+{sym['sub']} Risques à évaluer.
+{sym['sub']} Opportunités à saisir.
+
+---
+
+{sym['main']} Les implications business
+
+Productivité :
+{sym['sub']} Les gains ne sont plus marginaux.
+{sym['sub']} On parle de transformations profondes des workflows.
+
+Compétitivité :
+{sym['sub']} Les entreprises qui n'adoptent pas perdent du terrain.
+{sym['sub']} Pas dans 5 ans. Maintenant.
+
+Talents :
+{sym['sub']} Les meilleurs professionnels veulent les meilleurs outils.
+{sym['sub']} C'est un argument de recrutement.
+
+---
+
+{sym['main']} Mon conseil
+
+Ne vous précipitez pas.
+Mais ne restez pas immobile.
+
+{sym['sub']} Identifiez UN use case concret dans votre organisation.
+{sym['sub']} Testez avec une équipe pilote.
+{sym['sub']} Mesurez les résultats.
+{sym['sub']} Décidez ensuite de l'échelle.
+
+La pire stratégie ?
+Attendre que "ce soit mûr".
+C'est déjà mûr.
+La question : vous l'êtes ?
+
+{cta}
+
+{hashtag_str}"""
+
+    return post
+
+
+def generate_posts_for_article(article: dict, config: dict) -> Dict:
+    """Génère toutes les versions de post pour un article"""
+    return {
+        'article_title': article.get('title'),
+        'article_url': article.get('url'),
+        'article_source': article.get('source'),
+        'score': article.get('score'),
+        'categories': article.get('categories'),
+        'versions': {
+            'court': {
+                'length': '100-150 mots',
+                'content': generate_post_court(article, config)
+            },
+            'standard': {
+                'length': '200-300 mots',
+                'content': generate_post_standard(article, config)
+            },
+            'long': {
+                'length': '400-500 mots',
+                'content': generate_post_long(article, config)
+            }
+        }
+    }
+
+
+def generate_all_posts(
+    analyzed_data: Dict,
+    config: dict,
+    max_posts: int = 5,
+    min_score: float = 7.0
+) -> Dict:
+    """
+    Génère les posts pour les meilleurs articles.
+
+    Args:
+        analyzed_data: Données d'analyse
+        config: Configuration des templates
+        max_posts: Nombre max de posts à générer
+        min_score: Score minimum pour générer un post
+    """
+    top_articles = analyzed_data.get('top_articles', [])
+
+    # Filtrer par score
+    eligible = [a for a in top_articles if a.get('score', 0) >= min_score]
+
+    logger.info(f"Génération de posts pour {min(len(eligible), max_posts)} articles...")
+
+    posts = []
+    for article in eligible[:max_posts]:
+        post = generate_posts_for_article(article, config)
+        posts.append(post)
+        logger.info(f"  ✓ Post généré pour: {article['title'][:50]}...")
+
+    return {
+        'date': datetime.utcnow().strftime('%Y-%m-%d'),
+        'generated_at': datetime.utcnow().isoformat() + 'Z',
+        'total_generated': len(posts),
+        'min_score_used': min_score,
+        'posts': posts
+    }
+
+
+def save_posts(posts_data: Dict, output_dir: Path) -> Path:
+    """Sauvegarde les posts générés"""
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    date_str = posts_data.get('date', datetime.utcnow().strftime('%Y-%m-%d'))
+    output_file = output_dir / f"drafts_{date_str}.json"
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(posts_data, f, ensure_ascii=False, indent=2)
+
+    logger.info(f"Posts sauvegardés dans {output_file}")
+    return output_file
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Génère des posts LinkedIn à partir des articles analysés"
+    )
+    parser.add_argument(
+        '--date',
+        type=str,
+        default=None,
+        help="Date des articles analysés (YYYY-MM-DD)"
+    )
+    parser.add_argument(
+        '--input',
+        type=str,
+        default=None,
+        help="Chemin vers le fichier d'analyse JSON"
+    )
+    parser.add_argument(
+        '--top',
+        type=int,
+        default=5,
+        help="Nombre de posts à générer (défaut: 5)"
+    )
+    parser.add_argument(
+        '--min-score',
+        type=float,
+        default=7.0,
+        help="Score minimum pour générer un post (défaut: 7.0)"
+    )
+    parser.add_argument(
+        '--json',
+        action='store_true',
+        help="Sortie JSON des résultats"
+    )
+    parser.add_argument(
+        '--preview',
+        action='store_true',
+        help="Affiche un aperçu du premier post"
+    )
+
+    args = parser.parse_args()
+
+    # Charger la config
+    config = load_template_config()
+
+    # Déterminer le fichier d'entrée
+    if args.input:
+        input_path = Path(args.input)
+    else:
+        date_str = args.date or datetime.utcnow().strftime('%Y-%m-%d')
+        input_path = ANALYZED_DIR / f"analyzed_{date_str}.json"
+
+    if not input_path.exists():
+        logger.error(f"Fichier non trouvé: {input_path}")
+        logger.info("Lancez d'abord: python analyze_articles.py")
+        return 1
+
+    # Charger les articles analysés
+    analyzed_data = load_analyzed_articles(input_path)
+
+    # Générer les posts
+    posts_data = generate_all_posts(
+        analyzed_data,
+        config,
+        max_posts=args.top,
+        min_score=args.min_score
+    )
+
+    # Sauvegarder
+    output_file = save_posts(posts_data, OUTPUT_DIR)
+
+    # Afficher
+    if args.json:
+        print(json.dumps(posts_data, ensure_ascii=False, indent=2))
+    else:
+        print(f"\n{'='*50}")
+        print("POSTS LINKEDIN GÉNÉRÉS")
+        print(f"{'='*50}")
+        print(f"Total: {posts_data['total_generated']} posts")
+        print(f"Score minimum: {posts_data['min_score_used']}")
+        print(f"\nFichier: {output_file}")
+
+        if args.preview and posts_data['posts']:
+            print(f"\n{'='*50}")
+            print("APERÇU (version courte du premier post)")
+            print(f"{'='*50}")
+            first_post = posts_data['posts'][0]
+            print(f"\nArticle: {first_post['article_title'][:60]}...")
+            print(f"Score: {first_post['score']}/10")
+            print(f"\n{first_post['versions']['court']['content']}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    exit(main())
