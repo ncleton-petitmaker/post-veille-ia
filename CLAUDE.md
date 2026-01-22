@@ -1,52 +1,83 @@
-# BMAD Method Configuration for Claude Code
+# Post Veille IA - Configuration Claude Code
 
 ## Project: Post Veille IA
 
-This project uses the **BMAD Method v6** (Build More, Architect Dreams) for AI-driven agile development.
+Système de veille IA automatisé pour générer des posts LinkedIn.
 
-## Available Agents
+## Commandes Principales
 
-Use the following slash commands to activate specialized agents:
+### Veille
+- `/veille` - Workflow complet : collecte → analyse → génération de posts
+- `/veille-analyze` - Analyser les articles collectés
+- `/veille-generate` - Générer les posts LinkedIn
 
-### Core Agents
-- `/pm` - Product Manager: PRD creation, requirements, user stories
-- `/analyst` - Analyst: Research, brainstorming, market analysis
-- `/architect` - Architect: System architecture, technical design
-- `/dev` - Developer: Implementation, coding, debugging
-- `/ux` - UX Designer: User experience, wireframes, prototypes
-- `/sm` - Scrum Master: Sprint planning, ceremonies, impediments
-- `/tea` - Test Architect: Test strategy, quality assurance
-- `/tech-writer` - Technical Writer: Documentation
+### Gestion
+- `/discord` - Gérer le bot Discord pour la collecte
+- `/rpi` - Contrôler le Raspberry Pi (sync, status, logs)
+- `/youtube` - Extraire les transcripts YouTube
 
-### Quick Commands
-- `/workflow-init` or `/wi` - Initialize workflow and analyze project
-- `/prd` or `/pr` - Create Product Requirements Document
-- `/arch` - Create Architecture Document
-- `/stories` or `/es` - Create Epics and User Stories
+## Structure des Dossiers
 
-## Output Directories
+```
+config/                    # Configuration
+  sources.yaml            # Sources RSS, Reddit, Jina, etc.
+  scoring.yaml            # Règles de scoring des articles
+  content_preferences.json # Préférences de contenu et style
 
-- `_bmad-output/planning-artifacts/` - PRDs, Architecture docs, UX designs
-- `_bmad-output/implementation-artifacts/` - Sprint docs, stories, implementation notes
-- `docs/` - Long-term project documentation
+output/                    # Données générées
+  raw-articles/           # Articles bruts collectés
+  analyzed-articles/      # Articles analysés et scorés
+  linkedin-posts/         # Posts LinkedIn générés
 
-## Workflow Phases
+scripts/                   # Scripts Python
+  collect_all.py          # Collecte des articles
+  analyze_articles.py     # Analyse et scoring
+  collectors/             # Collecteurs par source
+```
 
-1. **Analysis** (Optional): Brainstorm, research, explore solutions
-2. **Planning** (Required): Create PRD, tech specs
-3. **Solutioning** (Required): Architecture, UX, technical approach
-4. **Implementation** (Required): Story-driven development with validation
+## Configuration du Contenu
 
-## Getting Started
+Édite `config/content_preferences.json` pour personnaliser :
+- `news_focus` : Types de news à privilégier
+- `post_style` : Format et style de rédaction des posts
 
-1. Start with `/pm` to create your PRD
-2. Use `/architect` for technical design
-3. Switch to `/dev` for implementation
-4. Use `/sm` for sprint management
+## Workflow Typique
 
-## BMAD Method Files
+1. Lance `/veille` pour exécuter le pipeline complet
+2. Consulte les posts générés dans `output/linkedin-posts/`
+3. Programme ou publie sur LinkedIn
 
-All BMAD configuration files are in `_bmad/`:
-- `_bmad/bmm/agents/` - Agent definitions
-- `_bmad/bmm/workflows/` - Workflow definitions
-- `_bmad/bmm/data/` - Templates and data files
+## Publication Automatique LinkedIn
+
+### Extension Chrome
+
+Une extension Chrome permet la publication automatique des posts programmés.
+
+#### Installation
+
+1. Charger l'extension dans Chrome (`chrome://extensions/` > Mode développeur > Charger l'extension non empaquetée > sélectionner `chrome-extension/`)
+2. Démarrer le serveur local : `./start-publish-server.sh`
+
+#### Fonctionnement
+
+```
+Claude Veille (GUI) → scheduled_posts.json → Publish Server → Extension Chrome → LinkedIn
+```
+
+- Le serveur expose les posts via API REST (port 3847)
+- L'extension vérifie toutes les minutes s'il y a des posts à publier
+- Quand c'est l'heure, elle publie automatiquement sur LinkedIn
+
+#### Structure
+
+```
+chrome-extension/        # Extension Chrome
+  manifest.json         # Configuration Manifest V3
+  src/
+    background.js       # Service worker (polling + coordination)
+    content-linkedin.js # Manipulation DOM LinkedIn
+    popup.html/js       # Interface popup
+
+publish-server/         # Serveur local Node.js
+  server.js            # API REST + Cron
+```

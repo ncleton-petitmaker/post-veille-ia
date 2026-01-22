@@ -35,7 +35,7 @@ wheels/
 *.egg
 
 # === DATA & OUTPUT ===
-_bmad-output/
+output/
 data/*.db
 *.db
 *.sqlite
@@ -70,3 +70,4 @@ tmp/
 temp/
 *.tmp
 *.bak
+publish-server/node_modules/
