@@ -71,3 +71,7 @@ temp/
 *.tmp
 *.bak
 publish-server/node_modules/
+
+# API Keys - NEVER COMMIT
+config/content_preferences.json
+publish-server/.chrome-profile/
