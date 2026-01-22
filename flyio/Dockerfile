@@ -31,7 +31,7 @@ COPY scripts/collectors/discord_collector.py scripts/collectors/
 COPY config/discord_channels.yaml config/
 
 # Créer les dossiers nécessaires
-RUN mkdir -p data _bmad-output/raw-articles
+RUN mkdir -p data output/raw-articles
 
 # Le .env sera fourni via les secrets Fly.io
 # Ne pas copier le .env dans l'image!

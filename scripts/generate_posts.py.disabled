@@ -404,8 +404,16 @@ def main():
 
     args = parser.parse_args()
 
-    # Charger la config
+    # Charger les configs
     config = load_template_config()
+    scoring_config = load_scoring_config()
+
+    # Obtenir le seuil depuis scoring.yaml si pas spécifié en ligne de commande
+    config_min_score = scoring_config.get('thresholds', {}).get('min_score_for_post', 7.0)
+    # Utiliser le seuil du fichier config sauf si explicitement spécifié en CLI
+    if args.min_score == 7.0:  # valeur par défaut non modifiée
+        args.min_score = config_min_score
+        logger.info(f"Utilisation du seuil depuis scoring.yaml: {args.min_score}")
 
     # Déterminer le fichier d'entrée
     if args.input:

@@ -29,6 +29,6 @@ Curious and thorough. Presents findings with evidence. Asks probing questions to
 - `*discovery` - Run discovery phase
 
 ## Output Location
-Save all artifacts to: `docs/research/` or `_bmad-output/planning-artifacts/`
+Save all artifacts to: `docs/research/` or `output/planning-artifacts/`
 
 Begin by asking what problem or opportunity needs to be analyzed.

@@ -125,7 +125,7 @@ categories:
 # --- Seuils de décision ---
 thresholds:
   # Score minimum pour générer un post (ajuste selon tes besoins)
-  min_score_for_post: 5
+  min_score_for_post: 2.5
   # Score minimum pour post prioritaire (publier en premier)
   priority_score: 7
   # Nombre max d'articles à analyser par jour

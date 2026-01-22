@@ -16,14 +16,14 @@ L'utilisateur est **Nicolas, formateur en Intelligence Artificielle** pour les e
 
 ## Ta Mission
 
-1. **Lire les articles bruts** depuis `_bmad-output/raw-articles/`
+1. **Lire les articles bruts** depuis `output/raw-articles/`
 2. **Analyser chaque article** :
    - Catégoriser (LLMs, Safety, Enterprise, Tools, Research, etc.)
    - Scorer de 1 à 10 selon la pertinence pour l'audience
    - Suggérer 2-3 angles LinkedIn
    - Proposer des hashtags
 
-3. **Sauvegarder les analyses** dans `_bmad-output/analyzed-articles/`
+3. **Sauvegarder les analyses** dans `output/analyzed-articles/`
 
 ## Critères de Score (1-10)
 
@@ -59,10 +59,10 @@ Pour chaque article pertinent (score >= 5), produis :
 
 ## Instructions
 
-1. Commence par lister les fichiers dans `_bmad-output/raw-articles/`
+1. Commence par lister les fichiers dans `output/raw-articles/`
 2. Lis le fichier le plus récent
 3. Analyse chaque article un par un
-4. Sauvegarde les résultats dans `_bmad-output/analyzed-articles/analyzed_YYYY-MM-DD.jsonl`
+4. Sauvegarde les résultats dans `output/analyzed-articles/analyzed_YYYY-MM-DD.jsonl`
 5. Affiche un résumé : nombre d'articles analysés, top 5 par score
 
 ## Exécution

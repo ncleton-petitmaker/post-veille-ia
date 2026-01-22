@@ -115,7 +115,7 @@ flyctl logs --config flyio/fly.toml
               ↓ rsync/scp
 ┌─────────────────────────────────────────┐
 │         Mac/RPi (collecte locale)       │
-│  _bmad-output/raw-articles/             │
+│  output/raw-articles/             │
 └─────────────────────────────────────────┘
 ```
 

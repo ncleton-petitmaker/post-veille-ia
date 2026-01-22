@@ -12,7 +12,7 @@ L'utilisateur peut demander :
 
 ### `status` - État du système
 ```bash
-ssh pi@$RPI_HOST "cd /home/pi/veille-ia && crontab -l && echo '---' && ls -la _bmad-output/raw-articles/ 2>/dev/null | tail -5"
+ssh pi@$RPI_HOST "cd /home/pi/veille-ia && crontab -l && echo '---' && ls -la output/raw-articles/ 2>/dev/null | tail -5"
 ```
 
 ### `sync` - Synchroniser les fichiers

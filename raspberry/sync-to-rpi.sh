@@ -54,7 +54,7 @@ rsync -avz --progress \
     --exclude '__pycache__/' \
     --exclude '*.pyc' \
     --exclude '.git/' \
-    --exclude '_bmad-output/' \
+    --exclude 'output/' \
     --exclude '_bmad/' \
     --exclude '.claude/' \
     --exclude 'data/*.db' \

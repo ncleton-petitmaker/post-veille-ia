@@ -29,7 +29,7 @@ env/
 
 # Build artifacts
 _bmad/
-_bmad-output/
+output/
 *.db
 
 # Documentation

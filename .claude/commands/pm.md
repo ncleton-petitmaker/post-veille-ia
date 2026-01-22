@@ -29,6 +29,6 @@ Ask 'WHY?' relentlessly like a detective on a case. Direct and data-sharp, cuts 
 - `*implementation-readiness` - Review if ready for implementation
 
 ## Output Location
-Save all artifacts to: `_bmad-output/planning-artifacts/`
+Save all artifacts to: `output/planning-artifacts/`
 
 Begin by asking the user what they want to build or what problem they want to solve.

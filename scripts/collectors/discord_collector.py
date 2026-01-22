@@ -41,7 +41,7 @@ SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent.parent
 CONFIG_PATH = PROJECT_ROOT / "config" / "discord_channels.yaml"
 DATA_DIR = PROJECT_ROOT / "data"
-OUTPUT_DIR = PROJECT_ROOT / "_bmad-output" / "raw-articles"
+OUTPUT_DIR = PROJECT_ROOT / "output" / "raw-articles"
 
 # Charger les variables d'environnement
 load_dotenv(PROJECT_ROOT / ".env")

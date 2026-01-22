@@ -5,14 +5,14 @@
 # Sync automatique vers Raspberry Pi via SSH
 # ============================================================
 
-version: 2
-last_updated: "2025-01-06T16:00:00Z"
+version: 4
+last_updated: "2026-01-19T23:00:00Z"
 
 # ============================================================
 # RSS FEEDS (Gratuit - feedparser)
 # ============================================================
 rss:
-  # --- Blogs Officiels (Priorité Haute) ---
+  # ========== LABS & COMPANIES (Priorité Haute) ==========
   - name: "OpenAI Blog"
     url: "https://openai.com/blog/rss/"
     priority: high
@@ -20,6 +20,11 @@ rss:
 
   - name: "Anthropic Blog"
     url: "https://www.anthropic.com/feed.xml"
+    priority: high
+    enabled: true
+
+  - name: "Google DeepMind"
+    url: "https://deepmind.google/blog/rss.xml"
     priority: high
     enabled: true
 
@@ -38,20 +43,40 @@ rss:
     priority: high
     enabled: true
 
-  # --- Tech News (Priorité Moyenne) ---
+  - name: "Microsoft Research"
+    url: "https://www.microsoft.com/en-us/research/feed/"
+    priority: high
+    enabled: true
+
+  - name: "AWS Machine Learning"
+    url: "https://aws.amazon.com/blogs/machine-learning/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "NVIDIA AI Blog"
+    url: "https://blogs.nvidia.com/blog/category/deep-learning/feed/"
+    priority: medium
+    enabled: true
+
+  # ========== TECH NEWS (Priorité Haute) ==========
   - name: "TechCrunch AI"
     url: "https://techcrunch.com/tag/artificial-intelligence/feed/"
-    priority: medium
+    priority: high
     enabled: true
 
   - name: "VentureBeat AI"
     url: "https://venturebeat.com/category/ai/feed/"
-    priority: medium
+    priority: high
     enabled: true
 
-  - name: "MIT Technology Review"
-    url: "https://www.technologyreview.com/feed/"
-    priority: medium
+  - name: "The Verge AI"
+    url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+    priority: high
+    enabled: true
+
+  - name: "Wired AI"
+    url: "https://www.wired.com/feed/tag/ai/latest/rss"
+    priority: high
     enabled: true
 
   - name: "Ars Technica AI"
@@ -59,41 +84,310 @@ rss:
     priority: medium
     enabled: true
 
+  - name: "MIT Technology Review"
+    url: "https://www.technologyreview.com/feed/"
+    priority: high
+    enabled: true
+
+  - name: "MIT News AI"
+    url: "https://news.mit.edu/rss/topic/artificial-intelligence2"
+    priority: medium
+    enabled: true
+
+  - name: "ZDNET AI"
+    url: "https://www.zdnet.com/topic/artificial-intelligence/rss.xml"
+    priority: medium
+    enabled: true
+
+  - name: "The Next Web AI"
+    url: "https://thenextweb.com/neural/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "404 Media"
+    url: "https://www.404media.co/rss/"
+    priority: medium
+    enabled: true
+
+  - name: "InfoQ AI"
+    url: "https://feed.infoq.com/ai-ml-data-eng/"
+    priority: medium
+    enabled: true
+
+  # ========== AI SPECIALIZED NEWS ==========
+  - name: "AI News"
+    url: "https://www.artificialintelligence-news.com/feed/"
+    priority: high
+    enabled: true
+
+  - name: "Unite.AI"
+    url: "https://www.unite.ai/feed/"
+    priority: high
+    enabled: true
+
+  - name: "AI Business"
+    url: "https://aibusiness.com/rss.xml"
+    priority: medium
+    enabled: true
+
+  - name: "Synced AI"
+    url: "https://syncedreview.com/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "Marktechpost"
+    url: "https://www.marktechpost.com/feed/"
+    priority: medium
+    enabled: true
+
+  # ========== RESEARCH & ACADEMIC ==========
+  - name: "Stanford AI Blog"
+    url: "https://ai.stanford.edu/blog/feed.xml"
+    priority: high
+    enabled: true
+
+  - name: "Berkeley AI (BAIR)"
+    url: "https://bair.berkeley.edu/blog/feed.xml"
+    priority: high
+    enabled: true
+
+  - name: "arXiv AI"
+    url: "https://rss.arxiv.org/rss/cs.AI"
+    priority: low
+    enabled: true
+
+  - name: "arXiv Machine Learning"
+    url: "https://rss.arxiv.org/rss/cs.LG"
+    priority: low
+    enabled: true
+
+  # ========== DATA SCIENCE & ML ==========
+  - name: "KDnuggets"
+    url: "https://www.kdnuggets.com/feed"
+    priority: medium
+    enabled: true
+
+  - name: "Towards Data Science"
+    url: "https://towardsdatascience.com/feed"
+    priority: medium
+    enabled: true
+
+  - name: "Machine Learning Mastery"
+    url: "https://machinelearningmastery.com/blog/feed/"
+    priority: low
+    enabled: true
+
+  - name: "Weights & Biases"
+    url: "https://wandb.ai/fully-connected/rss.xml"
+    priority: medium
+    enabled: true
+
+  # ========== NEWSLETTERS (RSS) ==========
+  - name: "Import AI"
+    url: "https://importai.substack.com/feed"
+    priority: high
+    enabled: true
+
+  - name: "Ahead of AI"
+    url: "https://magazine.sebastianraschka.com/feed"
+    priority: high
+    enabled: true
+
+  - name: "Latent Space"
+    url: "https://www.latent.space/feed"
+    priority: high
+    enabled: true
+
+  - name: "The Batch (DeepLearning.AI)"
+    url: "https://read.deeplearning.ai/feed"
+    priority: high
+    enabled: true
+
+  - name: "AI Weekly"
+    url: "https://aiweekly.co/feed/"
+    priority: medium
+    enabled: true
+
+  - name: "Last Week in AI"
+    url: "https://lastweekin.ai/feed"
+    priority: medium
+    enabled: true
+
+  - name: "Interconnects (Nathan Lambert)"
+    url: "https://www.interconnects.ai/feed"
+    priority: high
+    enabled: true
+
+  - name: "The AI Exchange (Dan Shipper)"
+    url: "https://every.to/chain-of-thought/feed"
+    priority: high
+    enabled: true
+
+  - name: "Chip Huyen"
+    url: "https://huyenchip.com/feed.xml"
+    priority: high
+    enabled: true
+
+  - name: "Sebastian Ruder NLP"
+    url: "https://newsletter.ruder.io/feed"
+    priority: medium
+    enabled: true
+
+  - name: "Cameron Wolfe Deep Learning"
+    url: "https://cameronrwolfe.substack.com/feed"
+    priority: high
+    enabled: true
+
+  - name: "Simon Willison"
+    url: "https://simonwillison.net/atom/everything/"
+    priority: high
+    enabled: true
+
+  - name: "Lil'Log (Lilian Weng)"
+    url: "https://lilianweng.github.io/index.xml"
+    priority: high
+    enabled: true
+
+  # ========== FRENCH SOURCES ==========
+  - name: "ActuIA"
+    url: "https://www.actuia.com/feed/"
+    priority: high
+    enabled: true
+
+  - name: "Le Monde Informatique IA"
+    url: "https://www.lemondeinformatique.fr/flux-rss/intelligence-artificielle/rss.xml"
+    priority: medium
+    enabled: true
+
+  - name: "L'Usine Digitale"
+    url: "https://www.usine-digitale.fr/rss/"
+    priority: medium
+    enabled: true
+
+  - name: "Siècle Digital"
+    url: "https://siecledigital.fr/feed/"
+    priority: medium
+    enabled: true
+
 # ============================================================
-# JINA AI READER (Sites JavaScript)
-# ============================================================
-# Usage: requests.get(f"https://r.jina.ai/{url}")
-# Free tier: 10M tokens, 500 RPM avec API key
+# JINA AI READER (Sites JavaScript / Newsletters)
 # ============================================================
 jina:
-  api_key_env: "JINA_API_KEY"  # Optionnel mais recommandé
+  api_key_env: "JINA_API_KEY"
 
   sites:
-    - name: "The Verge AI"
-      url: "https://www.theverge.com/ai-artificial-intelligence"
-      selector: "article"  # Optionnel
-      priority: high
-      enabled: true
-
-    - name: "TLDR AI Newsletter"
-      url: "https://tldr.tech/ai"
-      priority: high
-      enabled: true
-
+    # ========== TOP NEWSLETTERS ==========
     - name: "The Rundown AI"
       url: "https://www.therundown.ai/"
       priority: high
       enabled: true
 
+    - name: "TLDR AI"
+      url: "https://tldr.tech/ai"
+      priority: high
+      enabled: true
+
+    - name: "Superhuman AI"
+      url: "https://www.superhuman.ai/"
+      priority: high
+      enabled: true
+
+    - name: "The Neuron"
+      url: "https://www.theneuron.ai/"
+      priority: high
+      enabled: true
+
     - name: "Ben's Bites"
       url: "https://bensbites.beehiiv.com/"
+      priority: high
+      enabled: true
+
+    - name: "AlphaSignal"
+      url: "https://alphasignal.ai/"
+      priority: high
+      enabled: true
+
+    - name: "Mindstream AI"
+      url: "https://www.mindstream.ai/"
       priority: medium
+      enabled: true
+
+    - name: "Not A Bot"
+      url: "https://www.notabot.tech/"
+      priority: medium
+      enabled: true
+
+    # ========== RESEARCH & PAPERS ==========
+    - name: "HuggingFace Daily Papers"
+      url: "https://huggingface.co/papers"
+      priority: high
+      enabled: true
+
+    - name: "Papers With Code Trending"
+      url: "https://paperswithcode.com/latest"
+      priority: high
+      enabled: true
+
+    - name: "LabML Trending Papers"
+      url: "https://papers.labml.ai/papers/trending"
+      priority: medium
+      enabled: true
+
+    - name: "Semantic Scholar AI"
+      url: "https://www.semanticscholar.org/search?q=artificial+intelligence&sort=pub-date"
+      priority: low
+      enabled: true
+
+    # ========== AI AGENTS SPECIALIZED ==========
+    - name: "Galileo AI Blog"
+      url: "https://www.rungalileo.io/blog"
+      priority: high
+      enabled: true
+
+    - name: "LangChain Blog"
+      url: "https://blog.langchain.dev/"
+      priority: high
+      enabled: true
+
+    - name: "LlamaIndex Blog"
+      url: "https://www.llamaindex.ai/blog"
+      priority: high
+      enabled: true
+
+    # ========== TOOLS AGGREGATORS ==========
+    - name: "Future Tools"
+      url: "https://www.futuretools.io/"
+      priority: high
+      enabled: true
+
+    - name: "There's An AI For That"
+      url: "https://theresanaiforthat.com/new/"
+      priority: medium
+      enabled: true
+
+    - name: "AI Tool Report"
+      url: "https://aitoolreport.beehiiv.com/"
+      priority: medium
+      enabled: true
+
+    # ========== BUSINESS/ENTERPRISE AI ==========
+    - name: "a]B Data Science"
+      url: "https://www.ab-data.science/blog"
+      priority: medium
+      enabled: true
+
+    - name: "Constellation Research AI"
+      url: "https://www.constellationr.com/research/artificial-intelligence"
+      priority: medium
+      enabled: true
+
+    - name: "Hacker News AI"
+      url: "https://news.ycombinator.com/news"
+      priority: high
       enabled: true
 
 # ============================================================
 # REDDIT (JSON Endpoint - Gratuit)
-# ============================================================
-# Usage: requests.get(f"https://reddit.com/r/{sub}/{filter}.json")
 # ============================================================
 reddit:
   user_agent: "VeilleIA/2.0 (by /u/yourname)"
@@ -125,6 +419,12 @@ reddit:
       frequency: daily
       enabled: true
 
+    - name: "OpenAI"
+      filter: hot
+      min_upvotes: 100
+      frequency: daily
+      enabled: true
+
     # --- Tier 2: 2-3x/semaine ---
     - name: "singularity"
       filter: top
@@ -146,40 +446,76 @@ reddit:
       frequency: twice_weekly
       enabled: true
 
-    - name: "OpenAI"
+    - name: "Bard"
+      filter: hot
+      min_upvotes: 50
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "StableDiffusion"
       filter: hot
       min_upvotes: 100
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "midjourney"
+      filter: hot
+      min_upvotes: 100
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "agi"
+      filter: hot
+      min_upvotes: 50
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "LangChain"
+      filter: hot
+      min_upvotes: 30
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "ollama"
+      filter: hot
+      min_upvotes: 50
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "AnthropicAI"
+      filter: hot
+      min_upvotes: 30
+      frequency: twice_weekly
+      enabled: true
+
+    - name: "ArtificialInteligence"
+      filter: top
+      period: day
+      min_upvotes: 100
+      frequency: daily
+      enabled: true
+
+    - name: "deeplearning"
+      filter: hot
+      min_upvotes: 50
       frequency: twice_weekly
       enabled: true
 
 # ============================================================
 # DISCORD (LAION Scraper - Compte secondaire)
 # ============================================================
-# ATTENTION: Utiliser un compte secondaire (risque ToS)
-# Scrape quotidien à heure fixe
-# ============================================================
 discord:
   token_env: "DISCORD_USER_TOKEN"
   scrape_time: "08:00"
-
   channels: []
-    # Ajouter via: /sources add discord <server_id> <channel_id> --name "Nom"
-    # Exemple:
-    # - server_name: "LAION"
-    #   channel_id: "123456789"
-    #   max_messages: 100
-    #   enabled: true
 
 # ============================================================
 # YOUTUBE (Transcripts - Gratuit)
 # ============================================================
-# Usage: youtube-transcript-api
-# Collecte on-demand (pas de cron)
-# ============================================================
 youtube:
   channels:
     - name: "AI Explained"
-      channel_url: "https://www.youtube.com/@aiaboratoire"
+      channel_url: "https://www.youtube.com/@aiexplained-official"
       enabled: true
 
     - name: "Two Minute Papers"
@@ -190,24 +526,73 @@ youtube:
       channel_url: "https://www.youtube.com/@YannicKilcher"
       enabled: true
 
+    - name: "Matthew Berman"
+      channel_url: "https://www.youtube.com/@matthew_berman"
+      enabled: true
+
+    - name: "Fireship"
+      channel_url: "https://www.youtube.com/@Fireship"
+      enabled: true
+
+    - name: "The AI Advantage"
+      channel_url: "https://www.youtube.com/@aiadvantage"
+      enabled: true
+
+    - name: "David Shapiro"
+      channel_url: "https://www.youtube.com/@DavidShapiroAutomator"
+      enabled: true
+
+    - name: "Sam Witteveen"
+      channel_url: "https://www.youtube.com/@samwitteveenai"
+      enabled: true
+
+    - name: "Matt Wolfe"
+      channel_url: "https://www.youtube.com/@maboroshi_media"
+      enabled: true
+
+    - name: "Wes Roth"
+      channel_url: "https://www.youtube.com/@WesRoth"
+      enabled: true
+
+    - name: "The AI Breakdown"
+      channel_url: "https://www.youtube.com/@TheAIBreakdown"
+      enabled: true
+
+    - name: "AI Jason"
+      channel_url: "https://www.youtube.com/@AIJasonZ"
+      enabled: true
+
+    - name: "All About AI"
+      channel_url: "https://www.youtube.com/@AllAboutAI"
+      enabled: true
+
+    - name: "AssemblyAI"
+      channel_url: "https://www.youtube.com/@AssemblyAI"
+      enabled: true
+
+    - name: "Machine Learning Street Talk"
+      channel_url: "https://www.youtube.com/@MachineLearningStreetTalk"
+      enabled: true
+
+    - name: "AI Foundations"
+      channel_url: "https://www.youtube.com/@ai-foundations"
+      enabled: true
+
 # ============================================================
 # PARAMÈTRES GLOBAUX
 # ============================================================
 settings:
-  # Collecte
   max_articles_per_source: 15
   max_age_hours: 72
   dedupe_window_days: 7
 
-  # Rate limiting
   requests_delay_seconds: 2
   retry_attempts: 3
   timeout_seconds: 30
 
-  # Cron schedules (format: "HH:MM" ou "*/Xh")
   schedules:
-    rss: "*/6h"           # Toutes les 6 heures
-    jina: "*/6h"          # Toutes les 6 heures
-    reddit: "*/4h"        # Toutes les 4 heures
-    discord: "08:00"      # Une fois par jour
-    youtube: "manual"     # À la demande
+    rss: "*/6h"
+    jina: "*/6h"
+    reddit: "*/4h"
+    discord: "08:00"
+    youtube: "manual"

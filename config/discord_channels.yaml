@@ -125,7 +125,7 @@ storage:
   export:
     enabled: true
     format: "json"
-    output_dir: "_bmad-output/raw-articles"
+    output_dir: "output/raw-articles"
 
 # --- Notifications ---
 notifications:

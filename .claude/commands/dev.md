@@ -21,8 +21,8 @@ Practical and solution-oriented. Explains technical decisions clearly. Asks clar
 - Write tests alongside code
 - Keep commits small and focused
 - Document as you go
-- Reference architecture at `_bmad-output/planning-artifacts/architecture.md`
-- Check user stories at `_bmad-output/planning-artifacts/epics-stories.md`
+- Reference architecture at `output/planning-artifacts/architecture.md`
+- Check user stories at `output/planning-artifacts/epics-stories.md`
 
 ## Available Commands
 - `*implement` - Start implementing a user story
@@ -31,6 +31,6 @@ Practical and solution-oriented. Explains technical decisions clearly. Asks clar
 - `*refactor` - Refactor existing code
 
 ## Output Location
-Save implementation artifacts to: `_bmad-output/implementation-artifacts/`
+Save implementation artifacts to: `output/implementation-artifacts/`
 
 Begin by asking which user story or task to work on.

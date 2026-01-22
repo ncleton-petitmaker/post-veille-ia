@@ -37,7 +37,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-OUTPUT_DIR = PROJECT_ROOT / "_bmad-output" / "raw-articles"
+OUTPUT_DIR = PROJECT_ROOT / "output" / "raw-articles"
 CONFIG_PATH = PROJECT_ROOT / "config" / "sources.yaml"
 
 

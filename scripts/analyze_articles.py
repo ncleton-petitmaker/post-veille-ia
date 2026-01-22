@@ -31,14 +31,27 @@ logger = logging.getLogger(__name__)
 # Chemins
 PROJECT_ROOT = Path(__file__).parent.parent
 CONFIG_PATH = PROJECT_ROOT / "config" / "scoring.yaml"
-RAW_DIR = PROJECT_ROOT / "_bmad-output" / "raw-articles"
-OUTPUT_DIR = PROJECT_ROOT / "_bmad-output" / "analyzed-articles"
+PREFS_PATH = PROJECT_ROOT / "config" / "content_preferences.json"
+RAW_DIR = PROJECT_ROOT / "output" / "raw-articles"
+OUTPUT_DIR = PROJECT_ROOT / "output" / "analyzed-articles"
 
 
 def load_scoring_config() -> dict:
     """Charge la configuration de scoring"""
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
+
+
+def load_content_preferences() -> dict:
+    """Charge les préférences de contenu utilisateur"""
+    try:
+        with open(PREFS_PATH, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logger.warning("content_preferences.json non trouvé, utilisation des défauts")
+        return {}
+
+
 
 
 def load_articles(input_path: Path) -> List[dict]:
@@ -241,33 +254,117 @@ def suggest_hashtags(categories: List[str], config: dict) -> List[str]:
     return unique_tags[:max_tags]
 
 
+def extract_keywords_from_text(text: str) -> list:
+    """
+    Extrait les mots significatifs d'un texte (news_focus de l'utilisateur).
+    Ignore les mots vides (stop words).
+    """
+    # Mots vides à ignorer
+    stop_words = {
+        'le', 'la', 'les', 'un', 'une', 'des', 'de', 'du', 'au', 'aux',
+        'je', 'tu', 'il', 'elle', 'nous', 'vous', 'ils', 'elles',
+        'mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses',
+        'ce', 'cette', 'ces', 'qui', 'que', 'quoi', 'dont', 'où',
+        'et', 'ou', 'mais', 'donc', 'car', 'ni', 'si', 'pour', 'par',
+        'sur', 'sous', 'dans', 'avec', 'sans', 'entre', 'vers', 'chez',
+        'être', 'avoir', 'faire', 'pouvoir', 'vouloir', 'devoir', 'aller',
+        'est', 'sont', 'était', 'peut', 'va', 'fait', 'bien', 'plus',
+        'se', 'ne', 'pas', 'quels', 'quel', 'quelle', 'quelles',
+        'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been',
+        'to', 'of', 'in', 'on', 'at', 'for', 'with', 'by', 'from',
+        'cherche', 'uniquement', 'news', 'peuvent', 'intéresser', 'publique',
+        'demande', 'comment', 'pourquoi', 'important', 'autant', 'faire',
+        'sujets', 'inclure', 'exclure', 'éviter', 'trop', 'techniques'
+    }
+
+    # Nettoyer et extraire les mots
+    words = re.findall(r'[a-zA-ZÀ-ÿ]{3,}', text.lower())
+    keywords = [w for w in words if w not in stop_words]
+
+    # Retourner les mots uniques
+    return list(set(keywords))
+
+
+def quick_score_title(article: dict, config: dict, preferences: dict) -> float:
+    """
+    Score rapide basé sur le titre ET le texte news_focus de l'utilisateur.
+    Extrait les mots-clés DIRECTEMENT depuis le texte saisi par l'utilisateur.
+    """
+    title = article.get('title', '')
+    source = article.get('source_name', '')
+    title_lower = title.lower()
+
+    score = 0.0
+
+    # Extraire les mots-clés depuis le texte news_focus de l'utilisateur
+    news_focus = preferences.get('news_focus', '')
+    user_keywords = extract_keywords_from_text(news_focus)
+
+    # Score basé sur les mots-clés extraits du news_focus
+    matches = sum(1 for kw in user_keywords if kw in title_lower)
+    score += min(matches * 2.0, 10.0)
+
+    # Bonus source tier 1/2
+    criteria = config.get('scoring_criteria', {})
+    source_quality = criteria.get('source_quality', {})
+    if source_quality:
+        tier1 = source_quality.get('tier_1_sources', [])
+        tier2 = source_quality.get('tier_2_sources', [])
+        if any(t1.lower() in source.lower() for t1 in tier1):
+            score += 2.0
+        elif any(t2.lower() in source.lower() for t2 in tier2):
+            score += 1.0
+
+    return score
+
+
 def analyze_articles(
     input_path: Path,
     config: dict,
     max_articles: int = None
 ) -> Dict:
     """
-    Analyse tous les articles d'un fichier.
+    Analyse les articles en 2 passes:
+    1. Score rapide sur TOUS les titres (basé sur préférences utilisateur)
+    2. Analyse complète des meilleurs articles
 
     Returns:
         Dict avec les résultats d'analyse
     """
     articles = load_articles(input_path)
     thresholds = config.get('thresholds', {})
+    preferences = load_content_preferences()
 
     if max_articles is None:
         max_articles = thresholds.get('max_articles_to_analyze', 30)
 
-    logger.info(f"Analyse de {min(len(articles), max_articles)} articles...")
+    logger.info(f"Phase 1: Score rapide de {len(articles)} titres selon preferences utilisateur...")
 
+    # Phase 1: Score rapide sur tous les titres (basé sur news_focus)
+    articles_with_quick_score = []
+    for article in articles:
+        quick_score = quick_score_title(article, config, preferences)
+        articles_with_quick_score.append({
+            'article': article,
+            'quick_score': quick_score
+        })
+
+    # Trier par score rapide et prendre les meilleurs
+    articles_with_quick_score.sort(key=lambda x: x['quick_score'], reverse=True)
+    top_candidates = [item['article'] for item in articles_with_quick_score[:max_articles]]
+
+    logger.info(f"Phase 2: Analyse complete de {len(top_candidates)} articles selectionnes...")
+
+    # Phase 2: Analyse complète des meilleurs candidats
     analyzed = []
-    for article in articles[:max_articles]:
+    for article in top_candidates:
         result = score_article(article, config)
 
         analyzed.append({
             'title': article.get('title'),
             'url': article.get('url'),
             'source': article.get('source_name'),
+            'date': article.get('published_at', ''),
             'score': result['score'],
             'categories': result['categories'],
             'score_breakdown': result['breakdown'],
@@ -275,11 +372,12 @@ def analyze_articles(
             'suggested_hashtags': suggest_hashtags(result['categories'], config)
         })
 
-    # Trier par score décroissant
+    # Trier par score final décroissant
     analyzed.sort(key=lambda x: x['score'], reverse=True)
 
     # Statistiques
     min_score = thresholds.get('min_score_for_post', 7)
+    max_posts = thresholds.get('max_posts_per_day', 15)
     top_articles = [a for a in analyzed if a['score'] >= min_score]
 
     return {
@@ -289,7 +387,8 @@ def analyze_articles(
         'analyzed': len(analyzed),
         'above_threshold': len(top_articles),
         'threshold_used': min_score,
-        'top_articles': top_articles[:10],
+        'max_posts_per_day': max_posts,
+        'top_articles': top_articles[:max_posts],
         'all_analyzed': analyzed
     }
 
